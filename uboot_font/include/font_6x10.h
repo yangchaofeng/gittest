@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0
-
+#ifndef __FONT6x10_H
+#define __FONT6x10_H
 
 const unsigned char fontdata_6x10[] = {
 
@@ -3076,4 +3077,4 @@ const unsigned char fontdata_6x10[] = {
 	0x00, /* 00000000 */
 
 };
-
+#endif
