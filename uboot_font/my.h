@@ -6,7 +6,7 @@
 #include "gfx.h"
 
 
-#include "font.h"
+#include "include/font.h"
 #include "include/font_10x18.h"
 #include "include/font_6x10.h"
 #include "include/font_6x11.h"
