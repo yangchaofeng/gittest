@@ -10,8 +10,9 @@
 /*                                            */
 /**********************************************/
 
-
-#define FONTDATAMAX 2048
+#ifndef __FONTpearl8x8_H
+#define __FONTpearl8x8_H
+//#define FONTDATAMAX 2048
 
 const unsigned char fontdata_pearl8x8[2048] = {
 
@@ -2576,5 +2577,6 @@ const unsigned char fontdata_pearl8x8[2048] = {
    0x00, /* 00000000 */
 
 };
+#endif
 
 

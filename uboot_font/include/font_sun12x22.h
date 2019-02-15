@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0
-
-#define FONTDATAMAX 11264
+#ifndef __FONTsun12x22_H
+#define __FONTsun12x22_H
+//#define FONTDATAMAX 11264
 
 const unsigned char fontdata_sun12x22[11264] = {
 
@@ -6149,5 +6150,6 @@ const unsigned char fontdata_sun12x22[11264] = {
 	0x00, 0x00, /* 000000000000 */
 
 };
+#endif
 
 

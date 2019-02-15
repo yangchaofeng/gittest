@@ -38,9 +38,10 @@ __END__;
    byte contains the same four character bits in both nybbles.
    MSBit to LSBit = left to right.
  */
+#ifndef __FONTdata_4x6_H
+#define __FONTdata_4x6_H
 
-
-#define FONTDATAMAX 1536
+//#define FONTDATAMAX 1536
 
 const unsigned char fontdata_mini_4x6[1536] = {
 
@@ -2145,5 +2146,5 @@ const unsigned char fontdata_mini_4x6[1536] = {
 	0x00,	/*=   [    ]        */
 	/*}*/
 };
-
+#endif
 

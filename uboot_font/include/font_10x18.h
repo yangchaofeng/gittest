@@ -3,10 +3,9 @@
  * adapted from font_sun12x22.c *
  * by Jurriaan Kalkman 06-2005  *
  ********************************/
+#ifndef __FONT10x18_H
+#define __FONT10x18_H
 
-
-
-#define FONTDATAMAX 9216
 
 const unsigned char fontdata_10x18[9216] = {
 
@@ -5132,4 +5131,4 @@ const unsigned char fontdata_10x18[9216] = {
 
 };
 
-
+#endif

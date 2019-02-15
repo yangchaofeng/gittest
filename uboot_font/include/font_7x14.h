@@ -3,10 +3,9 @@
 /* this file adapted from font_8x16.c */
 /* by Jurriaan Kalkman 05-2005        */
 /**************************************/
+#ifndef __FONT7x14_H
+#define __FONT7x14_H
 
-
-
-#define FONTDATAMAX 3584
 
 const unsigned char fontdata_7x14[3584] = {
 
@@ -4108,5 +4107,5 @@ const unsigned char fontdata_7x14[3584] = {
 
 };
 
-
+#endif
 
