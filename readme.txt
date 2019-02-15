@@ -1,4 +1,6 @@
-
+1、git status/diff命令中怎样以彩色显示改动状态
+git config --global color.ui false
+git config --global color.ui true
 
 从github上下载代码: git clone + 网址 （SSH ：git@github.com:yangchaofeng/gittest.git）
 git clone git@github.com:yangchaofeng/gittest.git
