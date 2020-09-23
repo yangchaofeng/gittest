@@ -6,6 +6,7 @@
 
 #define MY_LIB_VERSION "0.0.1"
 
+int testnum = 0x85;
 
 int yangadd(int a,int b){
 	return (a+b);
