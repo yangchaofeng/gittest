@@ -9,6 +9,9 @@ git push
 
 ----------- 2019.06.27  init  workspace
 
-
+从github上更新: git pull
+在github上查看gittest某个提交修改：a5fc8638556295ae9f575f222ee66c383cc4e735
+https://github.com/yangchaofeng/gittest/commit/a5fc8638556295ae9f575f222ee66c383cc4e735
+----------- 20210109 
 
 
