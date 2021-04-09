@@ -1,6 +1,6 @@
 ifneq ($(KERNELRELEASE),)
 
-obj-m := hello004.o
+obj-m := test001.o
 
 else
 	

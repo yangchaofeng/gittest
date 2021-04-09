@@ -1,0 +1,1 @@
+/home/yangchaofeng/workspace/my_github/gittest/learn/kernel/kernel_power_supply_reg_notifier/test001.o-.text-26 /home/yangchaofeng/workspace/my_github/gittest/learn/kernel/kernel_power_supply_reg_notifier/test001.c .text lcd_bist_work_detect_charger call *%ebx

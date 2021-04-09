@@ -80,7 +80,7 @@ static int zte_lcd_read_file(char *filename, char *buf, int size)
 
 	return 0;
 }
-static unsigned long get_current_time_sec(void)
+static u64 get_current_time_sec(void)
 {
 	struct timeval current_time;
 	do_gettimeofday(&current_time);
@@ -94,6 +94,7 @@ static unsigned long get_current_time_sec(void)
 	rtc_time_to_tm(tsec, &tm);
 	printk("%s:%d tsec=%ld --> [%04x-%02d-%02d %02d:%02d:%02d]\n",__func__, __LINE__, tsec, tm.tm_year, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min , tm.tm_sec);	
 	#endif
+	printk("%s:%d current_time.tv_sec=0x%08x\n",__func__, __LINE__,current_time.tv_sec);
 	return current_time.tv_sec;
 }
 
@@ -113,73 +114,54 @@ static void dump_data_file_bist(void)
 	printk("%s:%d stop_bist=0x%08x\n",__func__, __LINE__,lcd_data_file_bist.stop_bist);
 }
 
-static bool lcd_is_run_bist_mod(void)
-{
-	
-
-
-	return 0;
-}
-
-static int test(void)
+static int test(int flag)
 {
 	int ret = 0,i = 0;
 	char filename[] = "/data/lcd_bist_time00";
 	unsigned char buf[64] = {0};
 
-	u32 tsec;
-	tsec = get_current_time_sec();
-
+	//first read data from file
 	ret = zte_lcd_read_file(filename, &buf[0], FILE_DATA_LEN);
-	if (ret == 0) {
-		for(i = 0; i < FILE_DATA_LEN; i++) {
-			printk("buf[%d]=0x%02x ",i,buf[i]);
-			if (i+1 % 8 == 0)
-				printk("\n");
-		}
-	}
 	memcpy(&lcd_data_file_bist, &buf[0], FILE_DATA_LEN);
-	dump_data_file_bist();
 
-	lcd_data_file_bist.is_need_bist = 0x1234;
-	lcd_data_file_bist.bist_total_time = 0x5678;
-	lcd_data_file_bist.sart_bist = 0x11223344;
-	lcd_data_file_bist.stop_bist = 0x55667788;
-
-	
-	memcpy(&buf[0], &lcd_data_file_bist, FILE_DATA_LEN);
-	ret = zte_lcd_write_file(filename, &buf[0], FILE_DATA_LEN);
-	if (ret == 0) {
-		for(i = 0; i < FILE_DATA_LEN; i++) {
-			printk("%s:%d buf[%d]=0x%02x ",__func__, __LINE__,i,buf[i]);
-			if (i+1 % 8 == 0)
-				printk("\n");
-		}
+	//suspend
+	if (lcd_data_file_bist.is_need_bist == 0 && flag == 0) {
+		return 0;
+	} else if (lcd_data_file_bist.is_need_bist == 1) {
+		lcd_data_file_bist.sart_bist = get_current_time_sec();
+	} else if (lcd_data_file_bist.is_need_bist == 0 && flag == 1){
+		lcd_data_file_bist.sart_bist = get_current_time_sec();
 	}
 
-	
-	dump_data_file_bist();
-	ret = zte_lcd_read_file(filename, &buf[0], FILE_DATA_LEN);
-	if (ret == 0) {
-		for(i = 0; i < FILE_DATA_LEN; i++) {
-			printk("%s:%d buf[%d]=0x%02x ",__func__, __LINE__,i,buf[i]);
-			if (i+1 % 8 == 0)
-				printk("\n");
-		}
-	}
-	memcpy(&lcd_data_file_bist, &buf[0], FILE_DATA_LEN);
-	dump_data_file_bist();
-
+	//resume
+	if (lcd_data_file_bist.is_need_bist == 0) {
+		return 0;
+	} else if (lcd_data_file_bist.is_need_bist == 1) {
+		lcd_data_file_bist.stop_bist = get_current_time_sec();
+		//wirte data to file
+		memcpy(&buf[0], &lcd_data_file_bist, FILE_DATA_LEN);
+		ret = zte_lcd_write_file(filename, &buf[0], FILE_DATA_LEN);
+	} 
 
 	#if 0
+	//read data from file
+	ret = zte_lcd_read_file(filename, &buf[0], FILE_DATA_LEN);
+	memcpy(&lcd_data_file_bist, &buf[0], FILE_DATA_LEN);
+	dump_data_file_bist();
 
+	//lcd_data_file_bist.is_need_bist = 0x1234;
+	//lcd_data_file_bist.bist_total_time = 0x5678;
+	//msleep(5000);
 
+	//wirte data to file
+	memcpy(&buf[0], &lcd_data_file_bist, FILE_DATA_LEN);
+	ret = zte_lcd_write_file(filename, &buf[0], FILE_DATA_LEN);
 
-		msleep(5000);
-
-
+	//read file for check wirte ok ?
+	ret = zte_lcd_read_file(filename, &buf[0], FILE_DATA_LEN);
+	memcpy(&lcd_data_file_bist, &buf[0], FILE_DATA_LEN);
+	dump_data_file_bist();
 	#endif
-
 
 	return 0;
 }
@@ -187,9 +169,10 @@ static int test(void)
 static int __init hello_init(void)  
 {  
     
-    printk("<0> Hello, 2021!\n");  
+    printk("<0> Hello, 2021! v0402_001\n");  
 
-    test();
+    test(1);
+	test(0);
 
     return 0;  
 }  
