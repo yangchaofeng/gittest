@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "private/resources.h"
+#include "include/private/resources.h"
 
 #include <fcntl.h>
 #include <linux/fb.h>
@@ -33,10 +33,11 @@
 #include <string>
 #include <vector>
 
-#include <android-base/strings.h>
+#include "include/android-base/stringprintf.h"//#include <android-base/stringprintf.h>
+#include "include/android-base/strings.h"//#include <android-base/strings.h>
 #include <png.h>
 
-#include "minui/minui.h"
+#include "include/minui/minui.h"//#include "minui/minui.h"
 
 static std::string g_resource_dir{ "/res/images" };
 
@@ -351,7 +352,7 @@ bool matches_locale(const std::string& prefix, const std::string& locale) {
     return false;
   }
 
-  if (android::base::StartsWith(locale, prefix)) {
+  if (1/*android::base::StartsWith(locale, prefix)*/) {
     return true;
   }
 
@@ -415,7 +416,7 @@ int res_create_localized_alpha_surface(const char* name,
     png_read_row(png_ptr, row.data(), nullptr);
     int w = (row[1] << 8) | row[0];
     int h = (row[3] << 8) | row[2];
-    __unused int len = row[4];
+    int len = row[4];
     char* loc = reinterpret_cast<char*>(&row[5]);
 
     // We need to include one additional line for the metadata of the localized image.
