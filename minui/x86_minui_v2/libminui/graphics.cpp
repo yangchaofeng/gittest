@@ -26,8 +26,8 @@
 #include "font_10x18.h"
 #include "include/android-base/properties.h"
 
-#include "graphics_drm.h"
-#include "graphics_fbdev.h"
+//#include "graphics_drm.h"
+//#include "graphics_fbdev.h"
 #include "include/minui/minui.h"
 
 static GRFont* gr_font = nullptr;
@@ -343,25 +343,27 @@ int gr_init_font(const char* name, GRFont** dest) {
 void gr_flip() {
   gr_draw = gr_backend->Flip();
 }
-
+/*
 std::unique_ptr<MinuiBackend> create_backend(GraphicsBackend backend) {
   switch (backend) {
     case GraphicsBackend::DRM:
       return std::make_unique<MinuiBackendDrm>();
     case GraphicsBackend::FBDEV:
       return std::make_unique<MinuiBackendFbdev>();
+
     default:
       return nullptr;
   }
-}
-
-/*int gr_init() {
+}*/
+/*
+int gr_init() {
   return gr_init(default_backends);
 }*/
 
-int gr_init(std::initializer_list<GraphicsBackend> backends) {
+//int gr_init(std::initializer_list<GraphicsBackend> backends) {
+int gr_init() {
   // pixel_format needs to be set before loading any resources or initializing backends.
-  std::string format = android::base::GetProperty("ro.minui.pixel_format", "");
+  std::string format = "ARGB_8888";//android::base::GetProperty("ro.minui.pixel_format", "");
   if (format == "ABGR_8888") {
     pixel_format = PixelFormat::ABGR;
   } else if (format == "RGBX_8888") {
@@ -374,12 +376,14 @@ int gr_init(std::initializer_list<GraphicsBackend> backends) {
     pixel_format = PixelFormat::UNKNOWN;
   }
 
-  int ret = gr_init_font("font", &gr_font);
+  int ret = gr_init_font("font_12_22", &gr_font);
   if (ret != 0) {
     printf("Failed to init font: %d, continuing graphic backend initialization without font file\n",
            ret);
+  } else {
+  	printf("sucess to init font: %d\n", ret);
   }
-
+/*
   std::unique_ptr<MinuiBackend> minui_backend;
   for (GraphicsBackend backend : backends) {
     minui_backend = create_backend(backend);
@@ -396,20 +400,28 @@ int gr_init(std::initializer_list<GraphicsBackend> backends) {
   }
 
   gr_backend = minui_backend.release();
+*/
 
-  int overscan_percent = android::base::GetIntProperty("ro.minui.overscan_percent", 0);
+	/* 2: init gr_draw */
+	auto surface = GRSurface::Create(DISPLAY_X, DISPLAY_Y, DISPLAY_X*4, 4);
+	gr_draw = surface.release();
+	memset(gr_draw->data(), 0, gr_draw->height * gr_draw->row_bytes);
+	//memset(gr_draw->data, 0, gr_draw->height * gr_draw->row_bytes);
+
+  int overscan_percent = 0;//android::base::GetIntProperty("ro.minui.overscan_percent", 0);
   overscan_offset_x = gr_draw->width * overscan_percent / 100;
   overscan_offset_y = gr_draw->height * overscan_percent / 100;
-
+/*
   gr_flip();
   gr_flip();
   if (!gr_draw) {
     printf("gr_init: gr_draw becomes nullptr after gr_flip\n");
     return -1;
   }
-
-  std::string rotation_str =
-      android::base::GetProperty("ro.minui.default_rotation", "ROTATION_NONE");
+  */
+printf("%s %d yang add for test\n",__func__, __LINE__);
+  std::string rotation_str = "ROTATION_NONE" ;
+      //android::base::GetProperty("ro.minui.default_rotation", "ROTATION_NONE");
   if (rotation_str == "ROTATION_RIGHT") {
     gr_rotate(GRRotation::RIGHT);
   } else if (rotation_str == "ROTATION_DOWN") {
@@ -420,9 +432,33 @@ int gr_init(std::initializer_list<GraphicsBackend> backends) {
     gr_rotate(GRRotation::NONE);
   }
 
+printf("%s %d yang add for test\n",__func__, __LINE__);
+
   if (gr_draw->pixel_bytes != 4) {
     printf("gr_init: Only 4-byte pixel formats supported\n");
   }
+
+  	/* 3: draw a char to gr_draw */
+	gr_color(0x11, 0x22, 0x33, 255);
+	gr_fill(0, 0, DISPLAY_X, DISPLAY_Y);
+	gr_color(0x77, 0x88, 0x99, 255);
+
+	time_t timep;
+	time (&timep);
+	char line[]="yang1234567_test_version_20220404";
+	gr_text(gr_font, 0, 0, asctime(gmtime(&timep)), 1);
+	gr_text(gr_font, 0, 50, line, 1);
+	printf("%s %d yang add for test\n",__func__, __LINE__);
+
+	GRSurface* progressBarFill;
+	//LoadBitmap("icon_error", &progressBarFill);
+	//DrawSurface(progressBarFill, 0, 0,  gr_get_width(progressBarFill), gr_get_height(progressBarFill), 0, 400);
+ 
+	/* 4: wirte gr_draw->data to file */
+	int fd = open("dataapp.raw",O_WRONLY | O_CREAT);
+	write(fd,gr_draw->data(), DISPLAY_X*DISPLAY_Y*4);
+	close(fd);
+
 
   return 0;
 }
@@ -458,3 +494,27 @@ void gr_fb_blank(bool blank, int index) {
 void gr_rotate(GRRotation rot) {
   rotation = rot;
 }
+
+
+
+
+//----------------------------------------------------------------
+int yanglibtest(int a){
+	printf("%s %d yang add for test 20220401\n",__func__, __LINE__);
+	return a*a;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//----------------------------------------------------------------------

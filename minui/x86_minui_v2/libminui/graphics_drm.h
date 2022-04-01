@@ -53,7 +53,7 @@ class GRSurfaceDrm : public GRSurface {
 
 class MinuiBackendDrm : public MinuiBackend {
  public:
-  MinuiBackendDrm() = default;
+  //MinuiBackendDrm() = default;
   ~MinuiBackendDrm() override;
 
   GRSurface* Init() override;

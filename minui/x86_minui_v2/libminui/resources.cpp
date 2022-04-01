@@ -65,7 +65,7 @@ std::unique_ptr<GRSurface> GRSurface::Clone() const {
 }
 
 PngHandler::PngHandler(const std::string& name) {
-  std::string res_path = g_resource_dir + "/" + name + ".png";
+  std::string res_path =  "/home/yangchaofeng/workspace/my_github/gittest/minui/x86_minui_v2/libminui/res/images/" + name + ".png";
   png_fp_.reset(fopen(res_path.c_str(), "rbe"));
   // Try to read from |name| if the resource path does not work.
   if (!png_fp_) {
@@ -352,7 +352,7 @@ bool matches_locale(const std::string& prefix, const std::string& locale) {
     return false;
   }
 
-  if (1/*android::base::StartsWith(locale, prefix)*/) {
+  if (0/*android::base::StartsWith(locale, prefix)*/) {
     return true;
   }
 

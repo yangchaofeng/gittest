@@ -28,6 +28,8 @@
 #include "../android-base/macros.h"
 #include "../android-base/unique_fd.h"
 
+#define DISPLAY_X	720
+#define DISPLAY_Y	1280
 //
 // Graphics.
 //
