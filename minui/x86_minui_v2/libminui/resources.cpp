@@ -305,6 +305,7 @@ int res_create_alpha_surface(const char* name, GRSurface** pSurface) {
   if (!png_handler) return png_handler.error_code();
 
   if (png_handler.channels() != 1) {
+    printf("%s %d yang add for test png_handler.channels(=%d) != 1, error\n", __func__, __LINE__, png_handler.channels());
     return -7;
   }
 
