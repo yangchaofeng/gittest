@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "include/private/resources.h"
+#include "private/resources.h"
 
 #include <fcntl.h>
 #include <linux/fb.h>
@@ -33,11 +33,10 @@
 #include <string>
 #include <vector>
 
-#include "include/android-base/stringprintf.h"//#include <android-base/stringprintf.h>
-#include "include/android-base/strings.h"//#include <android-base/strings.h>
+#include <android-base/strings.h>
 #include <png.h>
 
-#include "include/minui/minui.h"//#include "minui/minui.h"
+#include "minui/minui.h"
 
 static std::string g_resource_dir{ "/res/images" };
 
@@ -65,7 +64,7 @@ std::unique_ptr<GRSurface> GRSurface::Clone() const {
 }
 
 PngHandler::PngHandler(const std::string& name) {
-  std::string res_path =  "/home/yangchaofeng/workspace/my_github/gittest/minui/x86_minui_v2/libminui/res/images/" + name + ".png";
+  std::string res_path = g_resource_dir + "/" + name + ".png";
   png_fp_.reset(fopen(res_path.c_str(), "rbe"));
   // Try to read from |name| if the resource path does not work.
   if (!png_fp_) {
@@ -352,7 +351,7 @@ bool matches_locale(const std::string& prefix, const std::string& locale) {
     return false;
   }
 
-  if (0/*android::base::StartsWith(locale, prefix)*/) {
+  if (android::base::StartsWith(locale, prefix)) {
     return true;
   }
 
@@ -416,7 +415,7 @@ int res_create_localized_alpha_surface(const char* name,
     png_read_row(png_ptr, row.data(), nullptr);
     int w = (row[1] << 8) | row[0];
     int h = (row[3] << 8) | row[2];
-    int len = row[4];
+    __unused int len = row[4];
     char* loc = reinterpret_cast<char*>(&row[5]);
 
     // We need to include one additional line for the metadata of the localized image.

@@ -21,10 +21,10 @@
 
 #include <memory>
 
-#include "include/libdrm/xf86drmMode.h"
+#include <xf86drmMode.h>
 
 #include "graphics.h"
-#include "include/minui/minui.h"
+#include "minui/minui.h"
 
 class GRSurfaceDrm : public GRSurface {
  public:
@@ -53,7 +53,7 @@ class GRSurfaceDrm : public GRSurface {
 
 class MinuiBackendDrm : public MinuiBackend {
  public:
-  //MinuiBackendDrm() = default;
+  MinuiBackendDrm() = default;
   ~MinuiBackendDrm() override;
 
   GRSurface* Init() override;
