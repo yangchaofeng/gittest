@@ -25,9 +25,11 @@
 #include <string>
 #include <vector>
 
-#include <android-base/macros.h>
-#include <android-base/unique_fd.h>
+#include "../android-base/macros.h"
+#include "../android-base/unique_fd.h"
 
+#define DISPLAY_X	1200
+#define DISPLAY_Y	2000
 //
 // Graphics.
 //
