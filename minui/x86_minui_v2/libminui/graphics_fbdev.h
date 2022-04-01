@@ -23,10 +23,10 @@
 #include <memory>
 #include <vector>
 
-#include <android-base/unique_fd.h>
+#include <include/android-base/unique_fd.h>
 
 #include "graphics.h"
-#include "minui/minui.h"
+#include "include/minui/minui.h"
 
 class GRSurfaceFbdev : public GRSurface {
  public:

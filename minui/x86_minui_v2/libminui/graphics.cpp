@@ -23,11 +23,12 @@
 
 #include <memory>
 
-#include <android-base/properties.h>
+#include "font_10x18.h"
+#include "include/android-base/properties.h"
 
 #include "graphics_drm.h"
 #include "graphics_fbdev.h"
-#include "minui/minui.h"
+#include "include/minui/minui.h"
 
 static GRFont* gr_font = nullptr;
 static MinuiBackend* gr_backend = nullptr;
@@ -354,9 +355,9 @@ std::unique_ptr<MinuiBackend> create_backend(GraphicsBackend backend) {
   }
 }
 
-int gr_init() {
+/*int gr_init() {
   return gr_init(default_backends);
-}
+}*/
 
 int gr_init(std::initializer_list<GraphicsBackend> backends) {
   // pixel_format needs to be set before loading any resources or initializing backends.

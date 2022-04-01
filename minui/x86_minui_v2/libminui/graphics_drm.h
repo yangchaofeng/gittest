@@ -21,10 +21,10 @@
 
 #include <memory>
 
-#include <xf86drmMode.h>
+#include "include/libdrm/xf86drmMode.h"
 
 #include "graphics.h"
-#include "minui/minui.h"
+#include "include/minui/minui.h"
 
 class GRSurfaceDrm : public GRSurface {
  public:
