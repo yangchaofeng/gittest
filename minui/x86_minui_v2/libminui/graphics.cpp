@@ -360,6 +360,37 @@ int gr_init() {
   return gr_init(default_backends);
 }
 */
+//--------------------------------------------------------------------
+#if 0
+std::unique_ptr<GRSurface> LoadBitmap(const std::string& filename) {
+  GRSurface* surface;
+  if (auto result = res_create_display_surface(filename.c_str(), &surface); result < 0) {
+    LOG(ERROR) << "Failed to load bitmap " << filename << " (error " << result << ")";
+    return nullptr;
+  }
+  return std::unique_ptr<GRSurface>(surface);
+}
+
+
+void DrawSurface(const GRSurface* surface, int sx, int sy, int w, int h, int dx,
+                                   int dy) const {
+  gr_blit(surface, sx, sy, w, h, dx, dy);
+}
+#else
+void LoadBitmap(const char* filename, GRSurface** surface) {
+  int result = res_create_display_surface(filename, surface);
+  //int result = res_create_alpha_surface(filename, surface);
+  printf("%s %d yang add for test result=%d\n",__func__, __LINE__, result);
+}
+void DrawSurface(GRSurface* surface, int sx, int sy, int w, int h, int dx,
+                                   int dy)  {
+  gr_blit(surface, sx, sy, w, h, dx, dy);
+}
+#endif
+
+
+
+//-------------------------------------------------------------------
 //int gr_init(std::initializer_list<GraphicsBackend> backends) {
 int gr_init() {
   // pixel_format needs to be set before loading any resources or initializing backends.
@@ -402,7 +433,7 @@ int gr_init() {
   gr_backend = minui_backend.release();
 */
 
-	/* init gr_draw */
+	/*2: init gr_draw */
 	auto surface = GRSurface::Create(DISPLAY_X, DISPLAY_Y, DISPLAY_X*4, 4);
 	gr_draw = surface.release();
 	memset(gr_draw->data(), 0, gr_draw->height * gr_draw->row_bytes);
@@ -418,7 +449,7 @@ int gr_init() {
     return -1;
   }
   */
-  std::string rotation_str = "ROTATION_NONE" ;
+  std::string rotation_str = "ROTATION_RIGHT" ;
       //android::base::GetProperty("ro.minui.default_rotation", "ROTATION_NONE");
   if (rotation_str == "ROTATION_RIGHT") {
     gr_rotate(GRRotation::RIGHT);
@@ -430,15 +461,20 @@ int gr_init() {
     gr_rotate(GRRotation::NONE);
   }
 
-printf("%s %d yang add for test\n",__func__, __LINE__);
+  printf("%s %d yang add for test\n",__func__, __LINE__);
   if (gr_draw->pixel_bytes != 4) {
     printf("gr_init: Only 4-byte pixel formats supported\n");
   }
 
   	/* 3: draw a char to gr_draw */
 	gr_color(0x11, 0x22, 0x33, 255);
-	gr_fill(0, 0, DISPLAY_X, DISPLAY_Y);
-	gr_color(0x77, 0x88, 0x99, 255);
+	gr_color(0x00, 0x00, 0x00, 255);
+	if (rotation_str == "ROTATION_NONE" || rotation_str == "ROTATION_DOWN") {
+		gr_fill(0, 0, DISPLAY_X, DISPLAY_Y);
+	} else {
+		gr_fill(0, 0, DISPLAY_Y, DISPLAY_X);
+	}
+	gr_color(0xff, 0xff, 0xff, 255);
 
 	time_t timep;
 	time (&timep);
@@ -447,10 +483,11 @@ printf("%s %d yang add for test\n",__func__, __LINE__);
 	gr_text(gr_font, 0, 50, line, 1);
 	printf("%s %d yang add for test\n",__func__, __LINE__);
 
-	GRSurface* progressBarFill;
-	//LoadBitmap("icon_error", &progressBarFill);
-	//DrawSurface(progressBarFill, 0, 0,  gr_get_width(progressBarFill), gr_get_height(progressBarFill), 0, 400);
- 
+	GRSurface* error_icon_;
+	LoadBitmap("icon_error", &error_icon_);
+	DrawSurface(error_icon_, 0, 0,  gr_get_width(error_icon_), gr_get_height(error_icon_), 0, 400);
+
+
 	/* 4: wirte gr_draw->data to file */
 	int fd = open("dataapp.raw",O_WRONLY | O_CREAT);
 	write(fd,gr_draw->data(), DISPLAY_X*DISPLAY_Y*4);

@@ -203,6 +203,7 @@ int res_create_display_surface(const char* name, GRSurface** pSurface) {
     png_set_bgr(png_ptr);
   }
 
+
   for (png_uint_32 y = 0; y < height; ++y) {
     std::vector<uint8_t> p_row(width * 4);
     png_read_row(png_ptr, p_row.data(), nullptr);
@@ -334,7 +335,10 @@ int res_create_alpha_surface(const char* name, GRSurface** pSurface) {
 void res_set_resource_dir(const std::string& dirname) {
   g_resource_dir = dirname;
 }
+bool StartsWith(const std::string s , const std::string prefix){
 
+	return strncmp(s.c_str(), prefix.c_str(), prefix.size()) == 0;
+}
 // This function tests if a locale string stored in PNG (prefix) matches
 // the locale string provided by the system (locale).
 bool matches_locale(const std::string& prefix, const std::string& locale) {
@@ -354,7 +358,9 @@ bool matches_locale(const std::string& prefix, const std::string& locale) {
   if (0/*android::base::StartsWith(locale, prefix)*/) {
     return true;
   }
-
+  if (StartsWith(locale, prefix)) {
+    return true;
+  }
   size_t separator = prefix.find('-');
   if (separator == std::string::npos) {
     return false;
