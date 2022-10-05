@@ -14,6 +14,8 @@ git push
 https://github.com/yangchaofeng/gittest/commit/a5fc8638556295ae9f575f222ee66c383cc4e735
 ----------- 20210109 
 
+2、new ubuntu set
+
 sudo apt-get install git
 git config --global user.name yangchaofeng
 git config --global user.email 471552006@qq.com
